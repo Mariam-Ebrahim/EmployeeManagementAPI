@@ -16,15 +16,15 @@ public class EmployeesController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll() => Ok(_service.GetAll());
+    public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
 
     [HttpGet("{id}")]
-    public IActionResult Get(int id) => Ok(_service.GetById(id));
+    public async Task<IActionResult> Get(int id) => Ok(await _service.GetByIdAsync(id));
 
     [HttpPost]
-    public IActionResult Create(Employee employee)
+    public async Task<IActionResult> Create(Employee employee)
     {
-        var created = _service.Create(employee);
+        var created = await _service.CreateAsync(employee);
         return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
     }
 }

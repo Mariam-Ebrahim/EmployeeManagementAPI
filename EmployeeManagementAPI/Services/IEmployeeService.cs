@@ -4,7 +4,7 @@ namespace EmployeeManagementAPI.Services;
 
 public interface IEmployeeService
 {
-    List<Employee> GetAll();
-    Employee GetById(int id);
-    Employee Create(Employee employee);
+    Task<List<Employee>> GetAllAsync();
+    Task<Employee> GetByIdAsync(int id);
+    Task<Employee> CreateAsync(Employee employee);
 }

@@ -2,6 +2,7 @@
 using EmployeeManagementAPI.Exceptions;
 using EmployeeManagementAPI.Models;
 using EmployeeManagementAPI.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementAPI.Services;
 
@@ -16,25 +17,26 @@ public class EmployeeService : IEmployeeService
         _logger = logger;
     }
 
-    public List<Employee> GetAll()
+    public async Task<List<Employee>> GetAllAsync()
     {
         _logger.LogInformation("Getting all employees");
-        return _context.Employees.ToList();
+        return await _context.Employees.ToListAsync();
     }
 
-    public Employee GetById(int id)
+    public async Task<Employee> GetByIdAsync(int id)
     {
         _logger.LogInformation("Getting employee {EmployeeId}", id);
 
-        var employee = _context.Employees.FirstOrDefault(e => e.Id == id);
+        var employee = await _context.Employees.FirstOrDefaultAsync(e => e.Id == id);
 
         return employee ?? throw new NotFoundException($"Employee {id} was not found.");
     }
 
-    public Employee Create(Employee employee)
+    public async Task<Employee> CreateAsync(Employee employee)
     {
         _context.Employees.Add(employee);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
+
         _logger.LogInformation("Created employee {EmployeeId}", employee.Id);
         return employee;
     }
