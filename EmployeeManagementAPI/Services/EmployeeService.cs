@@ -1,4 +1,5 @@
 ﻿using EmployeeManagementAPI.Data;
+using EmployeeManagementAPI.Dtos;
 using EmployeeManagementAPI.Exceptions;
 using EmployeeManagementAPI.Models;
 using EmployeeManagementAPI.Services;
@@ -39,5 +40,25 @@ public class EmployeeService : IEmployeeService
 
         _logger.LogInformation("Created employee {EmployeeId}", employee.Id);
         return employee;
+    }
+    public async Task UpdateAsync(int id, UpdateEmployeeRequest request)
+    {
+        var employee = await GetByIdAsync(id); 
+
+        employee.Name = request.Name;
+        employee.Department = request.Department;
+        employee.Salary = request.Salary;
+
+        await _context.SaveChangesAsync();
+        _logger.LogInformation("Updated employee {EmployeeId}", id);
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var employee = await GetByIdAsync(id);   
+
+        _context.Employees.Remove(employee);
+        await _context.SaveChangesAsync();
+        _logger.LogInformation("Deleted employee {EmployeeId}", id);
     }
 }

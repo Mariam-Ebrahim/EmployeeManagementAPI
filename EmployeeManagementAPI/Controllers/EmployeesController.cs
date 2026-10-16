@@ -1,4 +1,5 @@
-﻿using EmployeeManagementAPI.Models;
+﻿using EmployeeManagementAPI.Dtos;
+using EmployeeManagementAPI.Models;
 using EmployeeManagementAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,5 +27,19 @@ public class EmployeesController : ControllerBase
     {
         var created = await _service.CreateAsync(employee);
         return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, UpdateEmployeeRequest request)
+    {
+        await _service.UpdateAsync(id, request);
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _service.DeleteAsync(id);
+        return NoContent();
     }
 }
