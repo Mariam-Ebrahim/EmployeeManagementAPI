@@ -36,6 +36,24 @@ public class DemoController : ControllerBase
         return "department data";
     }
 
+    [HttpGet("slow-no-token")]
+    public async Task<IActionResult> SlowNoToken()
+    {
+        _logger.LogInformation("SLOW (no token): started");
+        await Task.Delay(10000);   // ignores cancellation
+        _logger.LogInformation("SLOW (no token): finished");
+        return Ok("done");
+    }
+
+    [HttpGet("slow-with-token")]
+    public async Task<IActionResult> SlowWithToken(CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("SLOW (with token): started");
+        await Task.Delay(10000, cancellationToken);   // stops when cancelled
+        _logger.LogInformation("SLOW (with token): finished");
+        return Ok("done");
+    }
+
     [HttpGet("sequential")]
     public async Task<IActionResult> RunSequential()
     {

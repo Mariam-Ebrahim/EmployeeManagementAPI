@@ -17,29 +17,31 @@ public class EmployeesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        => Ok(await _service.GetAllAsync(cancellationToken));
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id) => Ok(await _service.GetByIdAsync(id));
+    public async Task<IActionResult> Get(int id, CancellationToken cancellationToken)
+        => Ok(await _service.GetByIdAsync(id, cancellationToken));
 
     [HttpPost]
-    public async Task<IActionResult> Create(Employee employee)
+    public async Task<IActionResult> Create(Employee employee, CancellationToken cancellationToken)
     {
-        var created = await _service.CreateAsync(employee);
+        var created = await _service.CreateAsync(employee, cancellationToken);
         return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, UpdateEmployeeRequest request)
+    public async Task<IActionResult> Update(int id, UpdateEmployeeRequest request, CancellationToken cancellationToken)
     {
-        await _service.UpdateAsync(id, request);
+        await _service.UpdateAsync(id, request, cancellationToken);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
-        await _service.DeleteAsync(id);
+        await _service.DeleteAsync(id, cancellationToken);
         return NoContent();
     }
 }
